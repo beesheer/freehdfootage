@@ -1,1 +1,24 @@
-<img class="ll-landing-page" src="images/landing_page.png"></img>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <div class="container">
+    <h1>Welcome to Free HD Video Footage Download</h1>
+    <p>You can freely download all of the HD video footage here and you can freely re-use them with the creative commons attribution license.</p>
+  </div>
+</div>
+
+<div class="container">
+    <div class="row">
+    <?php echo Functions_View::listVideos($this->videos); ?>
+    </div>
+    <div class="row">
+    <div class='pages col-md-12'>
+        <?php
+            echo $this->partial('_partials/pagination.phtml',
+            array(
+            'paginator'=>$this->paginator->getPages(),
+            'baseUrl'=>'/' . '?q=' . $this->query . '&p='
+            ));
+        ?>
+    </div>
+    </div>
+</div>

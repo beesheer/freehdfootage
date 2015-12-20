@@ -44,6 +44,11 @@ if ($env == 'development') {
 
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', $env);
 
+if ($env == 'development') {
+    error_reporting(E_ALL ^ E_STRICT); //This should be determined by $config->appStage == 'dev'
+    ini_set('display_errors',true); //This should be determined by $config too
+}
+
 // Set default date timezone
 if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set('America/Toronto');

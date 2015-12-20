@@ -34,22 +34,10 @@ class Controller_Action extends Zend_Controller_Action
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $identity = Zend_Auth::getInstance()->getIdentity();
             if (isset($identity->id)) {
-                $user = new Object_User($identity->id);
-                $roleIds = $user->getRoleIds();
-                foreach ($roleIds as $_roleId) {
-                    $role = new Object_Role($_roleId);
-                    if ($_roleId == Repo_Role::$roleIds[Repo_Role::ROLE_SUPERADMIN]
-                        || $_roleId == Repo_Role::$roleIds[Repo_Role::ROLE_ADMIN]) {
-                        $this->_redirect('/admin');
-                    } else if ($role->name == Repo_Role::ROLE_STUDENT) {
-                        // Student user to student area
-                        $this->_redirect('/student');
-                    } else {
-                        // User to user dashboard
-                        $this->_redirect('/');
-                    }
-                }
+                $this->_redirect('/admin');
             }
+        } else {
+            $this->_redirect('/');
         }
     }
 }
