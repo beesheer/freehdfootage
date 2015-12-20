@@ -1,0 +1,20 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h3>Update Uninstalled Sql Files First!</h3>
+    </div>
+    <div class="panel-body">
+        <p>Required SQL files to run.</p>
+        <p>Set install date by visiting <?php echo Functions_Common::hostUrl(); ?>/admin/index/set-install-date?date=YYYYMMDD so that older files won't be listed here.</p>
+    </div>
+    <div class="row container">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5>Uninstalled SQL Files</h5>
+                </div>
+                <?php echo Functions_View_Config::listSqlFiles($this->uninstalledFiles); ?>
+            </div>
+        </div>
+    </div>
+</div>

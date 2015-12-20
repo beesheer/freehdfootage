@@ -1,0 +1,128 @@
+<script>
+    <?php $identity = Zend_Auth::getInstance()->getIdentity(); ?>
+    <?php if($identity): ?>
+    var email = "<?php echo $identity->email; ?>";
+    var clientId = "<?php echo $identity->client_id; ?>";
+    <?php endif; ?>
+</script>
+
+<div id="navbar">
+
+    <div id="logo">
+        <div id="logo-title">STRATUS</div>
+        <div id="logo-subtitle">Lifelearn</div>
+    </div>
+
+    <?php if (Zend_Auth::getInstance()->hasIdentity()): ?>
+
+        <div id="menu-logout" class="menu link">
+            <span class="menu-logout-icon ion-power"></span>Logout
+        </div>
+
+        <?php if (Auth_Wrapper_User::userHasPermission("/client/index/change-password")) { ?>
+            <div id="menu-settings" class="menu">
+                <?php echo Functions_View::configMenu(); ?>
+            </div>
+        <?php } ?>
+
+
+        <div id="menu-mobile" class="menu" href="#"></div>
+        <div id="menu-user"></div>
+
+    <?php else: ?>
+        <div id="menu-login" class="menu"><a href="/login" style="text-decoration:none;">Client Login</a></div>
+    <?php endif; ?>
+</div>
+
+<div id="sidebar"  class="sidebar-open app-transition-ease">
+
+    <div id="sidebar-toggle" class="sidebar-toggle-open">
+        <div class="sidebar-toggle-left ion-chevron-left"></div>
+        <div class="sidebar-toggle-right ion-chevron-right"></div>
+    </div>
+
+    <div id="sidebar-content" >
+    <?php if (Zend_Auth::getInstance()->hasIdentity()): ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/analytics')): ?>
+    <div id="sidebar-analytics" class="sidebar list" href="/client/analytics"><span class="sidebar-icon ion-pie-graph"></span><span class="sidebar-title">Analytics</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/review-portal')): ?>
+    <div id="sidebar-portal" class="sidebar list" href="/client/review-portal"><span class="sidebar-icon ion-chatbubbles"></span><span class="sidebar-title">Review Portals</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/meeting')): ?>
+    <div id="sidebar-meeting" class="sidebar list" href="/client/meeting"><span class="sidebar-icon ion-calendar"></span><span class="sidebar-title">Meetings</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/contact')): ?>
+    <div id="sidebar-contact" class="sidebar list" href="/client/contact"><span class="sidebar-icon ion-person"></span><span class="sidebar-title">Contacts</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/my-presentations')): ?>
+    <div id="sidebar-my-presentations" class="sidebar list" href="##"><span class="sidebar-icon ion-monitor"></span><span class="sidebar-title">My Presentations</span></div>
+
+    <?php endif; ?>
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/result')): ?>
+        <div id="sidebar-result" class="sidebar list" href="/client/result"><span class="sidebar-icon ion-connection-bars"></span><span class="sidebar-title">Results</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/allresults')): ?>
+        <div id="sidebar-result" class="sidebar list" href="/client/analytics-results/display-quiz"><span class="sidebar-icon ion-connection-bars"></span><span class="sidebar-title">Survey & Quiz Results</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/document')): ?>
+        <div id="sidebar-document" class="sidebar list" href="/client/document"><span class="sidebar-icon ion-document-text"></span><span class="sidebar-title">Documents</span></div>
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/resource-library')): ?>
+        <div id="sidebar-resource-library" class="sidebar list" href="/client/resource-library"><span class="sidebar-icon ion-document-text"></span><span class="sidebar-title">Resource Library</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/page')): ?>
+        <div id="sidebar-page" class="sidebar list" href="/client/page"><span class="sidebar-icon ion-image"></span><span class="sidebar-title">Pages</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/title')): ?>
+        <div id="sidebar-title" class="sidebar list" href="/client/title"><span class="sidebar-icon ion-image"></span><span class="sidebar-title">Titles</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/package')): ?>
+        <div id="sidebar-package" class="sidebar list" href="/client/package"><span class="sidebar-icon ion-folder"></span><span class="sidebar-title">Packages</span></div>
+
+    <?php endif; ?>
+
+    <?php if (Auth_Wrapper_User::userHasPermission('/client/media-asset')): ?>
+        <div id="sidebar-media-asset" class="sidebar list" href="/client/media-asset"><span class="sidebar-icon ion-eye"></span><span class="sidebar-title">Media Library</span></div>
+
+    <?php endif; ?>
+
+    <div id="sidebar-control">
+        <div id="sidebar-control-icon" class="sidebar-control-min"></div>
+    </div>
+
+            <?php if(Auth_Wrapper_User::userHasPermission("/client/index/change-password")){ ?>
+                    <?php echo Functions_View::configMenuMobile(); ?>
+            <?php } ?>
+
+        <!--
+        <div id="sidebar-logout" class="sidebar list" href="/logout"><span class="sidebar-icon ion-power"></span><span class="sidebar-title">Logout</span></div>-->
+    <?php endif; ?>
+    </div>
+</div>
+
+<div id="overlay"></div>
+
+<div id="loader">
+	<div id="loader-info"></div>
+</div>

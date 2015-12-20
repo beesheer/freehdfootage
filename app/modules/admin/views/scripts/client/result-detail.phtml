@@ -1,0 +1,452 @@
+<?php
+
+function printToExcel($data,$title, $dates) {
+
+    $from = $dates[0];
+    $to = $dates[1];
+    $append = substr($from,0,10) . "_to_" . substr($to,0,10);
+
+    function cleanData(&$str) {
+
+        //$str = strip_tags( $str);
+        $str = preg_replace("/\t/", "\\t", $str);
+        $str = preg_replace("/\r?\n/", "\\n", $str);
+        // \\n not working in Excel, using pipe with spaces
+        $str = preg_replace("/(<br>)/", "  |  ", $str);
+
+        if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+    }
+
+    // filename for download
+    $filename = $title . "_" . $append . ".xls";
+
+    header("Content-Disposition: attachment; filename=\"$filename\"");
+    header("Content-Type: application/vnd.ms-excel");//xlsx
+
+    $flag = false;
+
+    foreach($data as $row) {
+        if(!$flag) {
+            // col names are part of data, don't echo, just set flag
+            // display field/column names as first row
+            // echo implode("\t", array_keys($row)) . "\r\n";
+            $flag = true;
+        }
+        array_walk($row, 'cleanData');
+        echo implode("\t", array_values($row)) . "\r\n";
+    }
+    exit;
+
+}
+
+function createTable($heads,$widths,$data) {
+
+    $tipHTML1 = '<span id="pop" href="#" class="tip-question" data-toggle="popover" ';
+    $tipText = array(   'numstudents'=>"Students who have started the test",
+                        'numcompleted'=>"Students who have completed the test",
+                        'numpassed'=>"Students who have passed of those who have completed the test",
+                        'avtime'=>"Overall average time spend on test",
+                        'leastchosen'=>"Least chosen of answers chosen",
+                        'mostchosen'=>"Most often chosen of answers chosen",
+                        'seconds'=>"All times in seconds",
+                        'percentcorrect'=>"Percentage students who have correctly answered this question"
+                    );
+
+    $tableLeader = '<div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr>';
+    $tableEnd   = '</tbody></table></div>';
+    $table = $tableLeader;
+    for($i=0; $i<count($heads); $i++) {
+        $tipMessage = '';
+        switch ($heads[$i]) {
+            case "Students (#)":
+                $tipMessage = $tipText['numstudents'];
+                break;
+            case "Completed (#)":
+                $tipMessage = $tipText['numcompleted'];
+                break;
+            case "Passed (#)":
+                $tipMessage = $tipText['numpassed'];
+                break;
+            case "Avg. time spent (seconds)":
+                $tipMessage = $tipText['avtime'];
+                break;
+            case "Least chosen option":
+                $tipMessage = $tipText['leastchosen'];
+                break;
+            case "Most chosen option":
+                $tipMessage = $tipText['mostchosen'];
+                break;
+            case "Avg. Time":
+                $tipMessage = $tipText['seconds'];
+                break;
+            case "% Correct":
+                $tipMessage = $tipText['percentcorrect'];
+                break;
+            default:
+                $tipHTML = '';
+                break;
+        }
+        $tipHTML = ($tipMessage == '') ? $tipHTML : $tipHTML1 . ' data-content="'.$tipMessage.'">?</span>';
+
+        $table .= '<th style="width: '.$widths[$i].'px;">'.$heads[$i].$tipHTML.'</th>';
+    }
+    $table .= '</tr></thead><tbody>';
+    $table .= '<tr>';
+    for($j=0; $j<count($data); $j++) {
+        for($k=0; $k<count($data[$j]); $k++) {
+            $table .= '<td>'  . $data[$j][$k] . '</td>';
+        }
+        $table .= '</tr>';
+    }
+    $table .= $tableEnd;
+    return $table;
+}
+
+
+if( isset( $this->quizLayout ) ) {
+
+    if( $this->pageType == "survey" ):
+
+    //first tab
+    $quizResultsGeneral = $this->quizResultsGeneral;
+    $ttl_start      =   $quizResultsGeneral->total_participants;
+    $ttl_complete   =   $quizResultsGeneral->total_completed;
+    $pctCompleted   =   Functions_Common::formattedPercent( $ttl_complete, $ttl_start) . "%";
+
+    $Tab1_column_heads        =   array('Students (#)','Completed (#)','Passed (#)','Avg. score (%)','Avg. time spent (seconds)');
+    $Tab1_column_widths       =   array(100,100,100,100,200);
+    $Tab1_column_Started      =   $ttl_start;
+    $Tab1_column_Completed    =   $ttl_complete . '( ' . $pctCompleted . ' )';
+
+    $Tab1_column_Passed       =   ($ttl_complete==0) ? 0 : $quizResultsGeneral->total_passed . '( ' . round(($quizResultsGeneral->total_passed/$ttl_complete)*100) . '%  )';
+    $Tab1_column_Score        =   round($quizResultsGeneral->average_score,2);
+    $Tab1_column_Time         =   round($quizResultsGeneral->average_time,0);
+    $Tab1_data                =   array(array($Tab1_column_Started,$Tab1_column_Completed,$Tab1_column_Passed,$Tab1_column_Score,$Tab1_column_Time));
+
+    $tableTab1      =   createTable( $Tab1_column_heads, $Tab1_column_widths, $Tab1_data );
+
+    //second tab
+    $quizResultsQuestion = $this->quizResultsQuestion;
+    $Tab2_column_heads          =   array('Question','Answer','Least chosen option','Most chosen option','Avg. Time','Longest','Quickest','% Correct');
+    $Tab2_column_widths         =   array(300,50,50,100,50,50,50,100);
+    $Tab2_data                  =   array();
+    $Tab2_row                   =   array();
+    for($i=0; $i<count($quizResultsQuestion); $i++) {
+        $Question   =   $quizResultsQuestion[$i]->questionText;
+        $Answer     =   $quizResultsQuestion[$i]->questionAnswer;
+        $Least      =   $quizResultsQuestion[$i]->answerLeast . " (" . round($quizResultsQuestion[$i]->pctLeast*100). "%)";
+        $Most       =   $quizResultsQuestion[$i]->answerMost . " (" . round($quizResultsQuestion[$i]->pctMost*100). "%)";
+        $AvgTime    =   round($quizResultsQuestion[$i]->avgTime,0);
+        $Longest    =   $quizResultsQuestion[$i]->mostTime;
+        $Quickest   =   $quizResultsQuestion[$i]->leastTime;
+        $AvgCorrect =   round($quizResultsQuestion[$i]->avgCorrect*100);
+        $Tab2_row   =   array($Question,$Answer,$Least,$Most,$AvgTime,$Longest,$Quickest,$AvgCorrect);
+        array_push($Tab2_data,$Tab2_row);
+    }
+    $tableTab2      =   createTable( $Tab2_column_heads, $Tab2_column_widths, $Tab2_data );
+
+    //third tab
+    $quizResultsStudent = $this->quizResultsStudent;
+    // handle additional student printout data as selected by user
+    $Print3_column_heads        =   array('Name','Email');
+    $Print3_column_option_fields = array();
+    if( $this->studentprintfields ) {
+        $printingOptionsStudentList = explode("|",$this->studentprintfields);
+        for($k=0; $k<count($printingOptionsStudentList); $k++) {
+            $keys = explode("---",$printingOptionsStudentList[$k]);
+            array_push($Print3_column_heads,$keys[1]);
+            array_push($Print3_column_option_fields,$keys[0]);
+        }
+    }
+    array_push($Print3_column_heads,'Registered','Completed','Passed','Score','Time (seconds)','Started','Last Activity');
+
+    $Tab3_column_heads          =   array('Name','Email','Registered','Completed','Passed','Score','Time (seconds)','Started','Last Activity');
+    $Tab3_column_widths         =   array(150,75,75,75,75,100,50,100,100);
+    $Tab3_data                  =   array();
+    $Print3_data                =   array();
+    $Tab3_row                   =   array();
+    $Print3_row                 =   array();
+
+    for($i=0; $i<count($quizResultsStudent); $i++) {
+        $Print3_row     =   array();
+        $Name               =   $quizResultsStudent[$i]->first . " " . $quizResultsStudent[$i]->last;
+        $Email              =   $quizResultsStudent[$i]->email;
+        array_push($Print3_row,$Name,$Email);
+        //start printing data
+        if( isset($printingOptionsStudentList) ) {
+            for($j=0; $j<count($Print3_column_option_fields); $j++) {
+                $fieldValue = (isset( $quizResultsStudent[$i][$Print3_column_option_fields[$j]] )) ? $quizResultsStudent[$i][$Print3_column_option_fields[$j]] : "n/a";
+                array_push($Print3_row,$fieldValue);
+            }
+        }
+        //end printing data
+        $Registration       =   substr( $quizResultsStudent[$i]->registered,0,10 );
+        $Completed          =   $quizResultsStudent[$i]->complete;
+        $Passed             =   ($Completed==1) ? $quizResultsStudent[$i]->passed : "n/a";
+        $Score              =   ($Completed==1) ? $quizResultsStudent[$i]->score : "n/a";
+        $Time               =   $quizResultsStudent[$i]->time;
+        $Start              =   substr( $quizResultsStudent[$i]->start,0,10 );
+        $Last               =   substr( $quizResultsStudent[$i]->lastactivity,0,10 );
+        $Tab3_row   =   array($Name,$Email,$Registration,$Completed,$Passed,$Score,$Time,$Start,$Last);
+        array_push($Print3_row,$Registration,$Completed,$Passed,$Score,$Time,$Start,$Last);
+        array_push($Tab3_data,$Tab3_row);
+        array_push($Print3_data,$Print3_row);
+    }
+    $tableTab3      =   createTable( $Tab3_column_heads, $Tab3_column_widths, $Tab3_data );
+
+    endif;
+
+    if( $this->pageType == "cefeedback" ) :
+
+        //
+        $CEFeedback = $this->CEFeedback;
+
+        //CE Feedback tab
+        $Respondents            =   $this->CEFeedbackRespondents;
+        $CETab1_column_heads    =   array('Question','Feedback (' . $Respondents . ' respondents)','Comments');//'Description',
+        $CETab1_column_widths   =   array(200,300,300);
+        $CETab1_data            =   array();
+        $CETab1_row             =   array();
+
+        for($i=0; $i<count($CEFeedback); $i++) {
+            $Question           =   $CEFeedback[$i]->question;
+            //$Description        =   $CEFeedback[$i]->description;
+            $Values             =   $CEFeedback[$i]->values;
+            $Comments           =   $CEFeedback[$i]->comments;
+            $CETab1_row         =   array($Question, $Values, $Comments);//$Description,
+            array_push($CETab1_data,$CETab1_row);
+        }
+
+        $CETableTab1            =   createTable( $CETab1_column_heads, $CETab1_column_widths, $CETab1_data );
+
+    endif;
+
+}
+
+if( isset( $this->exporting) ) {
+
+     switch($this->exporting) {
+         case "averages":
+             $printTab1_data = $Tab1_data;
+             array_unshift($printTab1_data,$Tab1_column_heads);
+             printToExcel($printTab1_data,"CourseAverages",$this->dateRange);
+             break;
+         case "questions":
+             $printTab2_data = $Tab2_data;
+             array_unshift($printTab2_data,$Tab2_column_heads);
+             printToExcel($printTab2_data,"QuizStats",$this->dateRange);
+             break;
+         case "students":
+             $printTab3_data = $Print3_data;
+             array_unshift($printTab3_data,$Print3_column_heads);
+             printToExcel($printTab3_data,"StudentData",$this->dateRange);
+             break;
+         case "cefeedback":
+             $printCETab_data = $CETab1_data;
+             array_unshift($printCETab_data,$CETab1_column_heads);
+             printToExcel($printCETab_data,"CEFeedbackData",$this->dateRange);
+             break;
+         case "studentlist":
+             array_unshift($printStudentList_data,$printStudentList_column_heads);
+             printToExcel($printStudentList_data,"StudentList",$this->dateRange);
+             break;
+     }
+}
+//echo "date ranges: " . $this->dateRange[0];
+?>
+<script>
+    var currentTab = "<?php echo $this->currentTab; ?>";
+    $(document).ready( function() {
+            $('[data-toggle="tooltip"]').tooltip({
+                'placement': 'top'
+            });
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover',
+                'placement': 'top'
+            });
+        }
+    )
+</script>
+<script src="/js/libraries/bootstrap/modal.js"></script>
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h3 id="pageName" rel="<?php echo $this->page->id; ?>"><?php echo $this->page->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Viewing results for survey/question: <?php echo $this->clientName . " > " . $this->page->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+            
+            <?php //echo $this->form; ?>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <form action="" method="post" name="form-date-range-filter" id="form-date-range-filter">
+            <input type="hidden" id="input-filter-date-from" name="input-filter-date-from" value="<?php echo $this->dateRange[0]; ?>" />
+            <input type="hidden" id="input-filter-date-to" name="input-filter-date-to" value="<?php echo $this->dateRange[1]; ?>" />
+            <input type="hidden" id="current-tab" name="current-tab" value="<?php echo $this->currentTab; ?>" />
+        </form>
+
+        <div id="date-filter" class="results-date-filter" >
+            <div id="results-filter-date-label" class="analytics box div">
+                <b>DATES:</b>
+            </div>
+            <div id="results-filter-dates">
+                <div id="analytics-filter-date-from"><?php echo date('d M Y', strtotime($this->dateRange[0]) ); ?></div>
+
+                <div id="analytics-filter-date-">—</div>
+                <div id="analytics-filter-date-to"><?php echo date('d M Y', strtotime($this->dateRange[1]) ); ?></div>
+            </div>
+            <div id="calendar" class="calendar popup">
+                <div id="calendar-arrow" class="calendar"></div>
+                <div id="calendar-month" class="calendar"></div>
+                <div id="calendar-month-prev" class="calendar"><span class="ion-chevron-left"></span></div>
+    <div id="calendar-month-next" class="calendar"><span class="ion-chevron-right"></span></div>
+                <div id="calendar-week" class="calendar">
+                    <div class="calendar-week">S</div>
+                    <div class="calendar-week">M</div>
+                    <div class="calendar-week">T</div>
+                    <div class="calendar-week">W</div>
+                    <div class="calendar-week">T</div>
+                    <div class="calendar-week">F</div>
+                    <div class="calendar-week">S</div>
+                </div>
+                <div id="calendar-day" class="calendar"></div>
+            </div>
+        </div>
+
+        <?php
+            if( isset( $this->quizLayout ) ):
+                if ($this->pageType == "survey"):
+        ?>
+                <!-- Quiz Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist" id="resultQuizTabs">
+                    <li class="active"><a href="#averages" role="tab" data-toggle="tab">Averages</a></li>
+                    <li><a href="#questions" role="tab" data-toggle="tab">Question History</a></li>
+                    <li><a href="#students" role="tab" data-toggle="tab">Student Progress</a></li>
+                    <li ><a href="#export1" role="tab" data-toggle="tab" style="background-color: #eee;">Export to Excel</a></li>
+                </ul>
+
+                <!-- Quiz Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="averages"><?php echo $tableTab1; ?></div>
+                    <div class="tab-pane fade" id="questions"><?php echo $tableTab2; ?></div>
+                    <div class="tab-pane fade" id="students"><?php echo $tableTab3; ?></div>
+                </div>
+                <?php
+                    endif;
+                    if ( $this->pageType == "cefeedback" ):
+                ?>
+                    <!-- CE Feedback Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist" id="resultQuizTabs">
+                        <li class="active"><a href="#cefeedback" role="tab" data-toggle="tab">CE Student Feedback</a></li>
+                        <li ><a href="#export1" role="tab" data-toggle="tab" style="background-color: #eee;">Export to Excel</a></li>
+                    </ul>
+
+                    <!-- CE Feedback Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="cefeedback"><?php echo $CETableTab1; ?></div>
+                    </div>
+
+                <?php endif; ?>
+        <?php endif; ?>
+        <div class="modal" id="studentPrintOptionsModal" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Options</h4>
+                        <h5>Any checked options will be included in the document</h5>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-bordered" id="printFieldOptions">
+                            <tbody>
+                            <tr rel="clinic---Clinic">
+                                <td><div class="checkbox "></div></td>
+                                <td>Clinic name</td>
+                            </tr>
+                            <tr rel="stateoflicensure---Licensing State">
+                                <td><div class="checkbox "></div></td>
+                                <td>State of licensure</td>
+                            </tr>
+                            <tr rel="license---License">
+                                <td><div class="checkbox "></div></td>
+                                <td>License</td>
+                            </tr>
+                            <tr rel="address---Address">
+                                <td><div class="checkbox "></div></td>
+                                <td>Address</td>
+                            </tr>
+                            <tr rel="city---City">
+                                <td><div class="checkbox "></div></td>
+                                <td>City</td>
+                            </tr>
+                            <tr rel="provstate---State/Province">
+                                <td><div class="checkbox "></div></td>
+                                <td>State/Province</td>
+                            </tr>
+                            <tr rel="country---Country">
+                                <td><div class="checkbox "></div></td>
+                                <td>Country</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel print</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="printStudentList()">Include data</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<!-- results-specific styles -->
+<style type="text/css">
+    #calendar {
+        right: 0px;
+        top: 50px;
+        width: 310px;
+        height: 330px;
+        background-color: rgba(255,255,255,0.9);
+        box-shadow: 1px 1px 16px rgba(0,0,0,0.2), 0px -10px 16px rgba(0,0,0,0.1);
+        display: none;
+        z-index: 7;
+    }
+    #pageName {
+        width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .results-date-filter {
+        position: absolute;
+        right: 10px;
+        top: 135px;
+        margin-bottom: 100px;
+        width: 280px;
+    }
+    #results-filter-date-label {
+        display: inline-block;
+    }
+    #results-filter-dates {
+        display: inline-block;
+        width: 75%;
+    }
+    .tip-question {
+        display: inline-block !important;
+        position:relative;
+        margin-left:5px;
+        padding:0px 4px;
+        margin-top:-2px;
+        color:#666;
+        border: 1px solid #999;
+        border-radius: 0;
+    }
+</style>
+<script src="/js/admin/calendar-results.js"></script>

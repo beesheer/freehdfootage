@@ -1,0 +1,24 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-form" class="btn btn-primary" id="create-new-form">New Form</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::formStatusFilter(
+                        $this->status ? Repo_Form::$statusLabels[$this->status] : false,
+                        'form-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3>Forms</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage forms, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listForms($this->forms); ?>
+</div>

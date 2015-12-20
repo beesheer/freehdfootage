@@ -1,0 +1,45 @@
+      <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+
+<div class="panel panel-default app-content">
+        <input type="button" onclick="getConfidence()" value="Confidence">
+    <input type="button" onclick="getOccurences()" value="Occurences">
+    <br /><br />
+    <div id="slider"></div>
+    <table border="0" width="100%">
+        <tr><td><input id="date_from" type="text" value="test" readonly></td>
+        <td align="right"><input id="date_to" type="text" value="test" readonly></td></tr>
+    </table>
+    <div id="main">
+        <div id="sequence"></div>
+        <div id="chart">
+            <div id="explanation" style="visibility: hidden;">
+                <span id="percentage"></span><br/>
+                of answers have this keyword in the title
+            </div>
+        </div>
+    </div>
+    <div id="subchart">
+        <h3>Survey Results</h3>
+        <div id="sub_top">
+
+        </div>
+        <div id="sub_inner">
+
+        </div>
+        <div id="available_options">
+
+
+        </div>
+    </div>
+    <script src="/js/admin/client/sequence.js"></script>
+    <script type="text/javascript">
+        // Hack to make this example display correctly in an iframe on bl.ocks.org
+        d3.select(self.frameElement).style("height", "700px");
+    </script>
+    <div id="details" style="padding:10px 10px 10px 10px;height:500px;width:500px;position:absolute;">
+
+    </div>
+    <div id="preloader" style="background-color:red;width:200px;height:200px;display:none;position:absolute;top:200px;left:550px;border-style:solid;border-width:5px;border-color:black;">
+        <h3 align="center" style="vertical-align: center">Loading</h3>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<?php
+
+function printToExcel($data,$title, $dates) {
+
+    $from = $dates[0];
+    $to = $dates[1];
+    $append = substr($from,0,10) . "_to_" . substr($to,0,10);
+
+    function cleanData(&$str) {
+
+        //$str = strip_tags( $str);
+        $str = preg_replace("/\t/", "\\t", $str);
+        $str = preg_replace("/\r?\n/", "\\n", $str);
+        // \\n not working in Excel, using pipe with spaces
+        $str = preg_replace("/(<br>)/", "  |  ", $str);
+
+        if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+    }
+
+    // filename for download
+    $filename = $title . "_" . $append . ".xls";
+
+    header("Content-Disposition: attachment; filename=\"$filename\"");
+    header("Content-Type: application/vnd.ms-excel");//xlsx
+
+    $flag = false;
+
+    foreach($data as $row) {
+        if(!$flag) {
+            // col names are part of data, don't echo, just set flag
+            // display field/column names as first row
+            // echo implode("\t", array_keys($row)) . "\r\n";
+            $flag = true;
+        }
+        array_walk($row, 'cleanData');
+        echo implode("\t", array_values($row)) . "\r\n";
+    }
+    exit;
+
+}
+
+function createTable($heads,$widths,$data) {
+
+    $tableLeader = '<div class="table-responsive"><table class="table table-bordered table-striped"><thead><tr>';
+    $tableEnd   = '</tbody></table></div>';
+    $table = $tableLeader;
+    for($i=0; $i<count($heads); $i++) {
+        $table .= '<th style="width: '.$widths[$i].'px;">'.$heads[$i].'</th>';
+    }
+    $table .= '</tr></thead><tbody>';
+    $table .= '<tr>';
+    for($j=0; $j<count($data); $j++) {
+        for($k=0; $k<count($data[$j]); $k++) {
+            $table .= '<td>'  . $data[$j][$k] . '</td>';
+        }
+        $table .= '</tr>';
+    }
+    $table .= $tableEnd;
+    return $table;
+}
+
+
+
+
+//student list tab, common to both ce and quiz results
+$listStudents = $this->listStudents;
+
+$StudentListTab_column_heads    =   array('First','Last','email','Clinic','Country','Registered');
+$StudentListTab_column_widths   =   array(50,75,150,150,50,100);
+$StudentListTab_data            =   array();
+$StudentListTab_row             =   array();
+$printStudentList_data          =   array();
+$printStudentList_column_heads    =   array('First','Last','email','Clinic','Phone', 'License Number','Association Number','State of Licensure','Address 1', 'Address 2', 'City', 'Province/State', 'Country','Postal','Registered','Language');
+
+for($i=0; $i<count($listStudents); $i++) {
+    $Row = $listStudents[$i];
+    $First                      =   $Row->firstname;
+    $Last                       =   $Row->surname;
+    $Email                      =   $Row->email;
+    $Clinic                     =   $Row->clinic;
+    $Country                    =   $Row->country;
+    $Registered                 =   $Row->registered;
+
+    $StudentListTab_row         =   array($First, $Last, $Email, $Clinic, $Country, $Registered);
+    array_push($StudentListTab_data,$StudentListTab_row);
+
+    //printing data
+    $printStudentList_row       =   array($First, $Last, $Email, $Clinic, $Row->phone, $Row->licensenumber, $Row->associationnumber, $Row->stateoflicensure, $Row->address1, $Row->address2, $Row->city, $Row->provstate, $Country, $Row->postalcode, $Registered, $Row->language);
+    array_push( $printStudentList_data, $printStudentList_row );
+}
+
+$StudentListTab                 =   createTable( $StudentListTab_column_heads, $StudentListTab_column_widths, $StudentListTab_data );
+
+
+
+if( isset( $this->exporting) ) {
+     switch($this->exporting) {
+         case "studentlist":
+             array_unshift($printStudentList_data,$printStudentList_column_heads);
+             printToExcel($printStudentList_data,"StudentList",$this->dateRange);
+             break;
+     }
+}
+//echo "date ranges: " . $this->dateRange[0];
+?>
+
+<script src="/js/libraries/bootstrap/modal.js"></script>
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h3>Students</h3>
+    </div>
+    <div class="panel-body">
+        <p>Viewing student registration list for : <?php ?></p>
+    </div>
+
+    <div class="container">
+        <!-- Quiz Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id="resultQuizTabs">
+            <li class="active"><a href="#studentlist" role="tab" data-toggle="tab">Students</a></li>
+            <li ><a href="#export1" role="tab" data-toggle="tab" style="background-color: #eee;">Export to Excel</a></li>
+        </ul>
+
+        <!-- Quiz Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="studentlist"><?php echo $StudentListTab; ?></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="block">
+	<h3>Client Feedback</h3>
+
+	<div ng-repeat="k in feedbackData">
+		<p><b>{{k.question}}</b>({{k.firstname}},{{k.surname}} @ <b>{{k.completed_datetime}}</b>)</p>
+		<p><b>{{k.option}}</b></p>
+		<p>{{k.answer}}</p>
+	</div>
+</div>

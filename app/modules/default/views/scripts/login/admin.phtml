@@ -1,0 +1,38 @@
+<div id="login-container">
+    
+    <div id="login-label">STRATUS</div>
+    
+    <div class="centerLoginContainer">
+        <?php if($this->errorMessage): ?>
+            <div class="errors"><?php echo $this->errorMessage; ?></div>
+        <?php endif; ?>
+        <?php
+            echo $this->form;
+        ?>
+    </div>
+    
+    <div id="login-reflection"></div>
+</div>
+
+<script>
+// don't show header & footer in login screen
+$("#container-header, #navbar, #sidebar").hide();
+// login container size fix 
+
+$("#container-main").css({
+	"position"	: "absolute",
+	"left"		: "0px",
+	"top"		: "0px",
+	"width"		: "100%",
+	"height"	: "100%"
+});
+*/
+
+var removeFooter = setInterval(function() {
+    if ($("#container-footer").length > 0) {
+        $("#container-footer").remove();
+        clearInterval(removeFooter);
+    }
+}, 5);
+
+</script>

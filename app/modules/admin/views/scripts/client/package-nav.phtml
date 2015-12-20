@@ -1,0 +1,58 @@
+<style>
+    span.fancytree-icon.status_hidden::before {
+        content: "H";
+        left: 4px;
+        position: relative;
+        font-size: 12px;
+        color: #666;
+        font-weight: 700;
+    }
+</style>
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h3 id="packageName" rel="<?php echo $this->package->id; ?>"><?php echo $this->package->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage package navigation: <?php echo $this->package->name; ?></p>
+    </div>
+
+    <div class="row container">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-primary" id="node-add">Add Child</button>
+                        <button type="button" class="btn btn-primary" id="node-add-root">Add Root</button>
+                        <button type="button" class="btn btn-primary" id="node-edit">Edit</button>
+                        <button type="button" class="btn btn-danger" id="node-remove">Remove</button>
+                        <button type="button" class="btn btn-success" id="save">Save</button>
+                    </div>
+                    <h5>Navigation</h5>
+                </div>
+                <div id="tree">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5>Available Titles (drag & drop a title into a folder on the left)</h5>
+                </div>
+                <ul class="list-group title-pages-list connectedSortable" id="package-titles">
+                    <?php echo Functions_View::listTitlesSimple($this->titles); ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php echo Functions_View::formModal($this->nodeForm); ?>
+<script type="text/javascript">
+<?php if ($this->package->nav_data): ?>
+    var nav = <?php echo $this->package->nav_data; ?>;
+<?php else: ?>
+    var nav = [];
+<?php endif; ?>
+    var saveDataUrl = '/admin/ajax/save-package-nav';
+</script>

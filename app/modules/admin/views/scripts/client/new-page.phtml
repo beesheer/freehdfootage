@@ -1,0 +1,28 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="page-save-submit">Save</button>
+        </div>
+        <h3 id="pageName">Create a new page</h3>
+    </div>
+    <div class="panel-body">
+        <p>Create a new page for a client.</p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+            <?php 
+
+            $this->form->removeElement('new-page-version');
+
+            echo $this->form; 
+
+            ?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var pageNavItems = [];
+</script>

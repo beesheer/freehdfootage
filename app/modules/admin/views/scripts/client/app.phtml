@@ -1,0 +1,21 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-app" class="btn btn-primary" id="create-new-app">New App</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3>Apps</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage apps, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listApps($this->apps); ?>
+</div>
+
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete App',
+        'Please make sure you want to delete selected apps:<br><b id="delete-app-name"></b>'
+    );
+?>

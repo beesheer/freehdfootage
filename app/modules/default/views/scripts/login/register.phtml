@@ -1,0 +1,150 @@
+<div id="banner-background"></div>
+
+<div id="register-container">
+    
+    <div id="login-label">Student Registration</div>
+    
+    <div class="centerLoginContainer registerContainer">
+        <?php if($this->errorMessage): ?>
+            <div class="errors"><?php echo $this->errorMessage; ?></div>
+        <?php endif; ?>
+        <?php
+            echo $this->form;
+        ?>
+    </div>
+    <div id="login-reflection"></div>
+</div>
+
+<script>
+
+var clientslug = '<?php echo $this->clientslug; ?>';
+var titleslug = '<?php echo $this->titleslug; ?>';
+var clientid = '<?php echo $this->clientid; ?>';
+var quizpageid = '<?php echo $this->quizpageid; ?>';
+var cefeedbackpageid = '<?php echo $this->cefeedbackpageid; ?>';
+
+$("#clientslug").val(clientslug);
+$("#titleslug").val(titleslug);
+$("#clientid").val(clientid);
+$("#quizpageid").val(quizpageid);
+$("#cefeedbackpageid").val(cefeedbackpageid);
+
+$("#menu-return-login").on('click', function() {
+    window.location='/login/student/index?clientslug='+clientslug+'&titleslug='+titleslug+'&clientid='+clientid+'&quizpageid='+quizpageid + '&cefeedbackpageid=' + cefeedbackpageid;
+})
+
+var el_first = $("#student-register-firstname").parent();
+var el_last = $("#student-register-lastname").parent();
+var el_email = $("#student-register-email").parent();
+$("<div class='3-column-row'>").insertBefore(el_first).append( el_first, el_last, el_email );
+
+var el_add1 =   $("#student-register-address1").parent();
+var el_add2 =   $("#student-register-address2").parent();
+$("<div class='2-column-row'>").insertBefore(el_add1).append( el_add1, el_add2  );
+
+var el_cntry = $("#student-register-country-selector").parent();
+var el_prov = $("#student-register-provstate-selector").parent();
+var el_provoth = $("#student-register-otherprovstate").parent();
+$("<div class='2-column-row'>").insertBefore(el_cntry).append( el_cntry, el_prov, el_provoth );
+
+var el_icntry = $("#student-register-country").parent();
+var el_iprov = $("#student-register-provstate").parent();
+$("<div class='2-column-row' style='position: absolute; width:95%;'>").insertBefore(el_icntry).append( el_icntry, el_iprov );
+
+var el_city = $("#student-register-city").parent();
+var el_postal =   $("#student-register-postal").parent();
+var el_phone =   $("#student-register-phone").parent();
+$("<div class='3-column-row'>").insertBefore(el_city).append( el_city, el_postal, el_phone  );
+
+var el_clinic = $("#student-register-clinic").parent();
+var el_lic = $("#student-register-license").parent();
+var el_assoc = $("#student-register-stateoflicensure-selector").parent();
+$("<div class='3-column-row'>").insertBefore(el_clinic).append( el_clinic, el_lic, el_assoc );
+
+if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+    $("#student-register-stateoflicensure-selector").css({float: "right"});
+}
+
+var el_pass =   $("#student-register-password").parent();
+var el_cpass =   $("#student-register-password-confirm").parent();
+$("<div class='2-column-row'>").insertBefore(el_pass).append( el_pass, el_cpass  );
+
+//for 3-column
+$(".centerLoginContainer.registerContainer").find('.3-column-row').each( function() {
+    $(this).find('.formElementBlock.form-group').each( function( ) {
+        $(this).addClass('form-group-3-column');
+    });
+    $(this).find('.formElementBlock.form-group:nth-child(3n+1)').each( function( i, e ) {
+        $(this).css({'marginLeft':'0'});
+    });
+})
+
+//for 2-column
+$(".centerLoginContainer.registerContainer").find('.2-column-row').each( function() {
+    $(this).find('.formElementBlock.form-group').each( function( ) {
+        $(this).addClass('form-group-2-column');
+    });
+    $(this).find('.formElementBlock.form-group:nth-child(2n+1)').each( function( i, e ) {
+        $(this).css({'marginLeft':'0'});
+    });
+});
+
+//make errors smaller
+$('.errors').each( function( ) {
+    $(this).addClass('compact');
+});
+
+//populate the lists
+var input_country = $("#student-register-country");
+var input_provstate = $("#student-register-provstate");
+var countries = $("#student-register-country-selector");
+var provstates = $("#student-register-provstate-selector");
+var input_other_provstate = $("#student-register-otherprovstate");
+var CPM = new CountryProvinceManager(countries,provstates);
+CPM.initHiddenInputs({'country':input_country,'provstate':input_provstate,'otherprovstate':input_other_provstate});
+CPM.configureDropDownsOnPost();
+CPM.setActions();
+
+//
+CPM.populateList( $("#student-register-stateoflicensure-selector"), CPM.locations.statesprovinces );
+CPM.changeListHeadText( $("#student-register-stateoflicensure-selector"), "State of licensure *" );
+
+$("#student-register-stateoflicensure-selector").change(function(e) {
+    var optionSelected = $("option:selected", this);
+    var textSelected   = optionSelected.text();
+    var valueSelected = this.value;
+    $("#student-register-stateoflicensure").val( textSelected );
+});
+
+// don't show header & footer & sidebar in reg  screen
+$("#container-header, #sidebar").hide();
+var removeFooter = setInterval(function() {
+    if ($("#container-footer").length > 0) {
+        $("#container-footer").remove();
+        clearInterval(removeFooter);
+    }
+    $("#sidebar").remove();
+}, 5);
+
+function applyIE9Placeholder() {
+    //apply IE9 placeholder fix
+    $("#student-register-firstname").placeholder();
+    $("#student-register-lastname").placeholder();
+    $("#student-register-email").placeholder();
+
+    $("#student-register-address1").placeholder();
+    $("#student-register-address2").placeholder();
+
+    $("#student-register-city").placeholder();
+    $("#student-register-postal").placeholder();
+    $("#student-register-phone").placeholder();
+
+    $("#student-register-clinic").placeholder();
+    $("#student-register-license").placeholder();
+
+    $("#student-register-password").placeholder();
+    $("#student-register-password-confirm").placeholder();
+}
+setTimeout(function(){applyIE9Placeholder()}, 500);
+
+</script>

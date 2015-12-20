@@ -1,0 +1,57 @@
+
+#main {
+  float: left;
+  width: 750px;
+}
+
+
+#sequence {
+  width: 1600px;
+  height: 70px;
+}
+
+#legend {
+  padding: 10px 0 0 3px;
+}
+
+#sequence text, #legend text {
+  font-weight: 600;
+  fill: #fff;
+}
+
+#chart {
+  position: relative;
+}
+
+#chart path {
+  stroke: #fff;
+}
+
+#explanation {
+  position: absolute;
+  top: 260px;
+  left: 580px;
+  width: 140px;
+  text-align: center;
+  color: #666;
+  z-index: 100;
+}
+
+#percentage {
+  font-size: 2.5em;
+}
+
+#subchart{
+
+	/*border-style:solid;
+	border-width:1px;
+	border-color:black;
+	background-color:yellow;
+	*/
+	width:200px;
+	left:1300px;
+	top:100px;
+	height:600px;
+	position:absolute;
+}
+

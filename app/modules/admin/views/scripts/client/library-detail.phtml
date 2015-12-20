@@ -1,0 +1,62 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="library-save-submit">Save</button>
+            <button type="button" class="btn btn-danger" id="library-delete">Delete</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::libraryStatusFilter(
+                        $this->status ? Repo_Library::$statusLabels[$this->status] : false,
+                        'libary-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3 id="libraryName" rel="<?php echo $this->library->id; ?>"><?php echo $this->library->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage library: <?php echo $this->library->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+            <?php echo $this->form; ?>
+        </div>
+        <div class="col-md-6">
+            <h3>Pages</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Pages</h5>
+                        </div>
+                        <ul class="list-group client-pages-list connectedSortable" id="client-pages">
+                            <?php echo Functions_View::listPageGroup($this->clientPages, 'li', 'page-list-item list-group-item'); ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Library Pages</h5>
+                        </div>
+                        <ul class="list-group title-pages-list connectedSortable" id="library-pages">
+                            <?php echo Functions_View::listPageGroup($this->libraryPages->toArray(), 'li', 'page-list-item list-group-item'); ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete Library',
+        'Please make sure you want to delete this library'
+    );
+?>

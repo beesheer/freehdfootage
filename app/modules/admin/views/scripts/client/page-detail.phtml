@@ -1,0 +1,162 @@
+<style type="text/css">
+.btn-primary
+{
+    width: auto;
+}
+
+.version_number_span
+{
+    font-size: 13px;
+}
+</style>
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+
+            <button type="button" class="btn btn-primary" id="page-save-submit">Save</button>
+            <?php if ($this->page->getPreviewLink()): ?>
+                <a class="btn btn-success<?php echo ( $this->page->type == 'template' && (is_null($this->page->template_id) || $this->page->template_id == '') ) ? ' disabled' : ''; ?>" id="page-preview" href="<?php echo $this->page->getPreviewLink(); ?>" target="_blank">Preview</a>
+            <?php endif; ?>
+            <?php //if ($this->page->getPreviewLinkDynamic() && $this->page->type != "static"): ?>
+            <!-- <a class="btn btn-success" id="page-preview" href="<?php //echo $this->page->getPreviewLinkDynamic();  ?>" target="_blank">Preview</a> -->
+            <?php //endif; ?>
+            <button type="button" class="btn btn-danger" id="page-delete">Delete</button>
+        </div>
+
+        <?php if ($this->page->type == 'template'): ?>
+        <div class="pull-right">&nbsp;&nbsp;</div>
+        <div class="btn-group pull-right">
+            <a class="btn btn-success" id="page-template-editor" href="<?php echo $this->page->getPageTemplateEditorLink(); ?>">Page Editor</a>
+        </div>
+        <?php endif; ?>
+
+        <h3 id="pageName" rel="<?php echo $this->page->id; ?>">
+            <?php echo $this->page->name; ?>
+            <span class="version_number_span">( Version : <?php echo $this->page->version; ?> )</span>
+        </h3>  
+    </div>
+    <div class="panel-body">
+        <p>Manage page: <?php echo $this->page->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+
+            <?php echo $this->form; ?>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Email Pdf Templates</h5>
+                        </div>
+                        <?php echo Functions_View::listTeamContents(Repo_PdfTemplate::getInstance()->getClientPdfTemplates($this->client->id), $this->pagePdfTemplates, 'Repo_PdfTemplate', 'pagePdfTemplates'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <!--<div class="btn-group pull-right">
+                                <button type="button" class="btn btn-primary" id="new-page-version">Ready to Publish</button>
+                            </div>-->
+                            <h5>Approved Versions</h5>
+                        </div>
+                        <?php echo Functions_View::listPageVersions($this->pageVersions); ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 hide" id="question-management" >
+                    <h3 id="questions_list_head">Questions</h3>
+                    <!-- jquery moves survey drop down here -->
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5>Survey Questions</h5>
+                                </div>
+                                <ul class="list-group client-pages-list connectedSortable" id="client-questions">
+                                    <input type="hidden" id="pagelanguage" value="<?php echo $this->lang; ?>">
+                                    <?php echo Functions_View::listQuestionGroup($this->surveyQuestions->toArray(), 'li', 'page-list-item-label list-group-item'); ?>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5>Page Questions</h5>
+                                </div>
+                                <ul class="list-group title-pages-list connectedSortable" id="page-questions">
+                                    <?php echo Functions_View::listQuestionGroup($this->pageQuestions->toArray(), 'li', 'page-list-item-label list-group-item'); ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Tag management code -->
+                <div class="col-md-12" id="tag_list">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="btn-toolbar pull-right"><button class="btn btn-default" id="revert-tags" title="Revert to last saved tag set">Revert</button>&nbsp;<button class="btn btn-primary" id="save-tags">Save Tags</button></div>
+                            <h5>Manage Tags</h5>
+                        </div>
+                        <div class="search-input-widget row">
+                            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                                <div class="inner-addon left-addon">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                    <input class="search form-control" id="search-object-tags" placeholder="Search tags">
+                                        <span class="right-of-input" id="clear-search-object-tags" title="Clear search input" >
+                                            <i class="glyphicon glyphicon-remove clear-input-icon" style="color: #999;"></i>
+                                            <span class="clear-input-label">CLEAR SEARCH</span>
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="form-object-tags" name="form-object-tags" action="" method="post">
+                            <input type="hidden" name="form-object-tag-list" id="form-object-tag-list" />
+                        </form>
+                        <table class="table table-bordered" id="object-tags">
+                            <thead>
+                            <tr class="thead-tr noClickThrough">
+                                <th class="right-border-white">Tag</th>
+                                <th id="tags-included-filter">Include</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                Manager_Tag_Helper::getInstance()->initTagTree($this->tagTree, $this->client->id, "page", $this->assetTags);
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="overlay">
+    <div id="loader">
+        <div id="loader-info"></div>
+    </div>
+</div>
+
+<?php
+    echo Functions_View::deleteModal( 'Confirm Delete Page', 'Please make sure you want to delete this page' );
+?>
+<script type="text/javascript">
+    var assetTagNames = '<?php echo json_encode($this->assetTagNames); ?>';
+    var pageNavItems = <?php echo Zend_Json::encode($this->page->navigation ? unserialize($this->page->navigation) : array()); ?>;
+    var updateMessage = '<?php echo $this->updateMessage; ?>';
+</script>

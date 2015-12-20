@@ -1,0 +1,24 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-package" class="btn btn-primary" id="create-new-package">New Package</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::packageStatusFilter(
+                        $this->status ? Repo_Package::$statusLabels[$this->status] : false,
+                        'package-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3>Packages</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage packages, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listPackages($this->packages); ?>
+</div>

@@ -1,0 +1,59 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+
+
+            <div class="btn-group" style="width:100px;"  >
+                <table>
+                    <tr>
+                        <td>
+                            <div class="checkbox<?php echo $this->surveyFilterClass; ?>" id="checkboxSurvey"></div>
+                        </td>
+                        <td style="height:34px;">Surveys</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="btn-group">
+                <?php
+                    echo Functions_View::surveyStatusFilter(
+                        $this->status ? Repo_Survey::$statusLabels[$this->status] : false,
+                        'survey-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+
+            <div class="btn-group">
+                <?php
+                    echo Functions_View::titleFilter( '/admin/client/result/', isset($this->title)? $this->title->name : false, 'result-title-filter', isset($this->title)? $this->title->id : false, $this->clientid );
+                ?>
+            </div>
+
+            <div class="btn-group">
+                <?php echo Functions_View::pageFormTypeFilter( '/admin/client/result/', 'page-form-type-filter', isset($this->pagetype)? $this->pagetype : 0, $this->clientid, isset($this->title)? $this->title->id : 0 , isset($this->status) ? $this->status : 0 ); ?>
+            </div>
+
+            <?php if($this->surveyFilter): ?>
+                <script>document.getElementById("client-title-dropdown").style.display = 'none';</script>
+            <?php endif; ?>
+
+        </div>
+        <h3>Survey Results</h3>
+    </div>
+    <div class="panel-body">
+        <p>View survey results</p>
+    </div>
+    <?php  echo Functions_View::listTitlePageSurveys($this->surveys); ?>
+</div>
+<div class="panel panel-default app-content">
+    <div class="panel-heading">
+        <h3>Registered Students</h3>
+    </div>
+    <div class="panel-body">
+        <p>View student registration lists</p>
+    </div>
+    <?php  echo Functions_View::listAppStudentRegistrants($this->studentLists); ?>
+</div>

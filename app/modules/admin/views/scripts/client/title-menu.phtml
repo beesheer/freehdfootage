@@ -1,0 +1,56 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h3 id="titleName" rel="<?php echo $this->title->id; ?>"><?php echo $this->title->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage title menu: <?php echo $this->title->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-12">
+            <h3>Title Menu</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-primary" id="node-add">Add Child Node</button>
+                                <button type="button" class="btn btn-primary" id="node-add-root">Add Root Node</button>
+                                <button type="button" class="btn btn-primary" id="node-edit">Edit</button>
+                                <button type="button" class="btn btn-danger" id="node-remove">Remove</button>
+                            </div>
+                            <h5>Menu</h5>
+                        </div>
+                        <div id="tree">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row container">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5>Current Selected Menu Item</h5>
+                </div>
+                <div class="container">
+                    <div id="currentNodeDetails"></div>
+                </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5>Title Pages</h5>
+                </div>
+                <ul class="list-group title-pages-list connectedSortable" id="title-pages">
+                    <?php echo Functions_View::listPageGroup($this->titlePages->toArray(), 'li', 'page-list-item list-group-item', false); ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php echo Functions_View::formModal($this->nodeForm); ?>

@@ -1,0 +1,13 @@
+<div class="block">
+	<h3>All Answers</h3>
+	<div ng-controller="allAnswerPaginationController">
+	    <pagination total-items="allCount" ng-model="currentPage" max-size="maxSize" class="pagination-lg" boundary-links="true" ng-change="pageChanged()"></pagination>
+	</div>
+	<br />
+	<div ng-repeat="i in sofieAllAnswers">
+		<p><span style="font-weight:bold">Q.{{$index+1}} {{i.the_question}}</span></p>
+		<p ng-class="{highlight:i.isBestAnswer,'':!i.isBestAnswer}">{{i.evidencelist.text}}</p>
+		<p><b>Reference: </b>{{i.evidencelist.title}}</p>
+		<hr />
+	</div>
+</div>

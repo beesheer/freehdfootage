@@ -1,0 +1,32 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="save-submit">Save</button>
+            <a class="btn btn-success" href="<?php echo $this->template->getPreviewDownloadLink(); ?>" target="_blank">Preview</a>
+            <button type="button" class="btn btn-danger" id="delete">Delete</button>
+        </div>
+        <h3 id="pdfTemplateName" rel="<?php echo $this->template->id; ?>"><?php echo $this->template->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage PDF Template: <?php echo $this->template->name; ?></p>
+        <p>Use {token_name} as the token holders.</p>
+        <p>The PDF size is set to width 1024px and height 768px. Paper size is set to 7inch by 5.625inch.</p>
+        <?php if($this->template->static_pdf): ?>
+        <p>This template is using a static PDF: <br /> <a href="<?php echo $this->template->getPreviewDownloadLink(); ?>" target="_blank"><?php echo $this->template->static_pdf; ?></a></p>
+        <?php endif; ?>
+    </div>
+    <div class="row container">
+        <div class="col-md-12">
+            <h3>Details</h3>
+            <?php echo $this->form; ?>
+        </div>
+    </div>
+</div>
+
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete',
+        'Please make sure you want to delete this PDF template'
+    );
+?>

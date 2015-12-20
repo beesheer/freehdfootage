@@ -1,0 +1,5 @@
+$(function(){
+
+    //jquery code here
+
+});

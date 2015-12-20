@@ -1,0 +1,31 @@
+<div class="panel panel-default app-content">
+    <style type="text/css">
+        // Ipad fix
+        .modal-backdrop
+        {
+            top: -800px;
+        }
+    </style>
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="create-new-contact">New Contact</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3>Contacts</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage contacts, some guidelines or description</p>
+    </div>
+
+</div>
+<script>
+	$(document).ready(function () {
+		$('input').on('blur', function () {
+			setTimeout(function () {
+				$(window).scrollLeft(0);
+			}, 200);
+		});
+	});
+
+</script>

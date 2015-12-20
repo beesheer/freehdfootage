@@ -1,0 +1,59 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="team-save-submit">Save</button>
+            <button type="button" class="btn btn-danger" id="team-delete">Delete</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3 id="teamName" rel="<?php echo $this->team->id; ?>"><?php echo $this->team->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage team: <?php echo $this->team->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+            <?php echo $this->form; ?>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Users</h5>
+                        </div>
+                        <?php echo Functions_View::listTeamContents(Repo_User::getInstance()->getClientUsers($this->client->id), $this->teamUsers, 'Repo_User', 'teamUsers'); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Teams</h5>
+                        </div>
+                        <?php echo Functions_View::listTeamContents(Repo_Team::getInstance()->getClientTeams($this->client->id, false, array($this->team->id)), $this->teamTeams, 'Repo_Team', 'teamTeams'); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Packages</h5>
+                        </div>
+                        <?php echo Functions_View::listTeamContents(Repo_Package::getInstance()->getClientPackages($this->client->id), $this->teamPackages, 'Repo_Package', 'teamPackages'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete Team',
+        'Please make sure you want to delete this team'
+    );
+?>

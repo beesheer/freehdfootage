@@ -1,0 +1,95 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="form-save-submit">Save</button>
+            <button type="button" class="btn btn-danger" id="form-delete">Delete</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::FormStatusFilter(
+                        $this->status ? Repo_Form::$statusLabels[$this->status] : false,
+                        'form-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3 id="formName" rel="<?php echo $this->pageForm->id; ?>" ><?php echo $this->pageForm->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage form: <?php echo $this->pageForm->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+            <?php echo $this->form; ?>
+        </div>
+        <div class="col-md-6">
+            <h3>Items</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="list-group client-items-list connectedSortable" id="client-items">
+                            <button type="button" class="btn btn-primary" id="add-form-item">Add Form Item</button>
+                        <?php //echo Functions_View::listPageGroup($this->formItems, 'li', 'formItem-list-item list-group-item'); ?>
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Form Items</h5>
+                        </div>
+                        <ul class="list-group form-items-list connectedSortable" id="form-items">
+                            <?php echo Functions_View::listFormItemGroup($this->formItems, 'li', 'formItem-list-item list-group-item'); ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-form-item-modal" tabindex="-1" role="dialog" aria-labelledby="addFormItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="deleteModalLabel">Add New Form Item</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="form-item-form">
+                    <div class="form-group">
+                        <label for="form-item-label">Form Item Label</label>
+                        <input class="form-control" id="form-item-label" type="text">
+                        <label for="form-item-order">Order</label>
+                        <input class="form-control" id="form-item-order" type="text">
+                        <label for="form-item-type">Form Item Type</label>
+                        <select class="form-control" class="form-control" id="form-item-type">
+                            <option id="fi-text-input">Text Input</option>
+                            <option id="fi-radio-group">Radio Group</option>
+                            <option id="fi-checkbox-group">Checkbox Group</option>
+                            <option id="fi-slider-group">Slider Group</option>
+                            <option id="fi-value-input-group">Value Input Group</option>
+                        </select>
+                    </div>
+                    <a class="btn btn-primary" id="add-form-item-option">Add Option</a>
+                    <div class="form-group" id="form-item-options-form">
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-to-form">Add to Form</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete Form',
+        'Please make sure you want to delete this form'
+    );
+?>

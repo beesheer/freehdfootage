@@ -1,0 +1,13 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-pdf-template" class="btn btn-primary" id="create-new">New PDF Template</a>
+        </div>
+        <h3>PDF Templates</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage PDF templates, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listPdfTemplates($this->templates); ?>
+</div>

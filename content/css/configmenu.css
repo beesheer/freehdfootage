@@ -1,0 +1,67 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 26-Aug-2014, 4:52:00 PM
+    Author     : rmikhail
+*/
+
+#menu-config-dropdown{
+	background:#5AA5B5;
+}
+
+.config-item{
+	text-align:center;
+	color:#FFFFFF;
+	font-size:20px;
+}
+
+.config-item:hover{
+	background:#54D4FF;
+}
+
+.config-item-mobile:hover{
+	background:#800000;
+	//padding:5px 5px 20px 50px;
+	padding:5px 5px 10px 44px;
+	color:#FFFFFF;
+	background-image: url("/client/images/keys-icon-hover.png");
+	background-position:8px -2px;
+	//background-image: url("/client/images/menu-hover.png");
+    //background-position: 0 -155px;
+	background-repeat:no-repeat;
+}
+
+.config-item-mobile{
+	//padding:5px 5px 20px 50px;
+	padding:5px 5px 10px 44px;
+	background-image: url("/client/images/keys-icon.png");
+	background-position:8px -2px;
+	color: #888;
+	//background-image: url("/client/images/menu.png");
+    //background-position: 0 -155px;
+	background-repeat:no-repeat;
+}
+
+.config-item-mobile > a:link{
+
+}
+
+.config-item > a:link {
+	text-decoration:none;
+	text-align:center;
+	color:#FFFFFF;
+	font-size:20px;
+}
+
+.config-item > a:visited{
+	text-decoration:none;
+	text-align:center;
+	color:#FFFFFF;
+	font-size:20px;
+}
+
+
+

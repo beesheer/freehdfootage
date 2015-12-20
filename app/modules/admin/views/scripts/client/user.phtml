@@ -1,0 +1,25 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="create-new-user">New User</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3>Users</h3>
+    </div>
+    <div id="user_list">
+        <div class="panel-body">
+            <p>Manage users, some guidelines or description</p>
+            <div class="col-md-4">
+                <div class="inner-addon left-addon">
+                    <input class="search form-control" placeholder="Search users">
+                </div>
+                <nav>
+                    <ul class="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+        <?php echo Functions_View::listUsers($this->users); ?>
+    </div>
+</div>
+<?php echo Functions_View::formModal(new Form_Admin_Client_User_Create()); ?>

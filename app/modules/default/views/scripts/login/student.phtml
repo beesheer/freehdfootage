@@ -1,0 +1,93 @@
+<div id="banner-background"></div>
+
+<div id="login-container">
+    
+    <div id="login-label">Please login</div>
+    
+    <div class="centerLoginContainer">
+        <?php if($this->errorMessage): ?>
+            <div class="errors"><?php echo $this->errorMessage; ?></div>
+        <?php endif; ?>
+        <?php
+            echo $this->form;
+            //other params:
+            /*
+            $this->client;
+            $this->title;
+            */
+        ?>
+    </div>
+
+    <div id="retrieve-password-container">
+        <div class="inner">
+            <div class="closer" id="password-retrieve-closer">X</div>
+            <div id="login-label">Retrieve password</div>
+            <p>Enter your email in the field below and click Retrieve. If your email is found in our records, you will receive an email notification.</p>
+            <div class="formElementBlock form-group">
+                <input type="text" name="getemail" id="student-login-password-retrieve" value="" class="form-control" placeholder="Enter your email">
+            </div>
+            <div class="submitButtonDiv">
+                <button name="button" id="student-password-retrieve-submit" type="button" value="Forgotten your password?" class="submit-button secondary">RETRIEVE</button></div>
+        </div>
+    </div>
+
+    <div id="login-reflection"></div>
+</div>
+
+<script>
+
+// don't show header & footer in login screen
+$("#container-header, #navbar, #sidebar").hide();
+
+var clientslug = '<?php echo $this->clientslug; ?>';
+var titleslug = '<?php echo $this->titleslug; ?>';
+var clientid = '<?php echo $this->clientid; ?>';
+var quizpageid = '<?php echo $this->quizpageid; ?>';
+var cefeedbackpageid = '<?php echo $this->cefeedbackpageid; ?>';
+$("#clientslug").val(clientslug);
+$("#titleslug").val(titleslug);
+$("#quizpageid").val(quizpageid);
+$("#clientid").val(clientid);
+$("#cefeedbackpageid").val(cefeedbackpageid);
+
+//if student has not logged in via a course:
+if(!clientslug) $('#notregistered-label, #student-register').remove();
+
+$("#student-register").on('click', function() {
+    //alert('/register?clientslug='+clientslug+'&titleslug='+titleslug+'&clientid='+clientid+'&quizpageid='+quizpageid + '&cefeedbackpageid=' + cefeedbackpageid)
+    window.location='/login/register?clientslug='+clientslug+'&titleslug='+titleslug+'&clientid='+clientid+'&quizpageid='+quizpageid + '&cefeedbackpageid=' + cefeedbackpageid;
+})
+
+$("#password-retrieve-closer").on('click', function() {
+    $('#retrieve-password-container').fadeOut();
+})
+$("#forgot-password-note").on("click",function() {
+    //$('#retrieve-password-container').fadeIn();
+    var parameters = new Object();
+    parameters.message  = "forgotpassword";
+    parent.postMessage(JSON.stringify(parameters),'*');
+})
+$("#student-password-retrieve-submit").on('click', function() {
+    var email = $("#student-login-password-retrieve").val();
+    if (email=="") {
+        alert("Please enter an email")
+    } else {
+        var query = 'clientslug='+clientslug+'&titleslug='+titleslug+'&clientid='+clientid+'&quizpageid='+quizpageid + '&cefeedbackpageid=' + cefeedbackpageid + '&retrievepassword=true&email='+$("#student-login-password-retrieve").val();
+        window.location='/student/?'+query;
+    }
+})
+
+var removeFooter = setInterval(function() {
+    if ($("#container-footer").length > 0) {
+        $("#container-footer").remove();
+        clearInterval(removeFooter);
+    }
+}, 5);
+
+function applyIE9Placeholder() {
+    //apply IE9 placeholder fix
+    $("#student-login-username").placeholder();
+    $("#student-login-password").placeholder();
+}
+setTimeout(function(){applyIE9Placeholder()}, 500);
+</script>

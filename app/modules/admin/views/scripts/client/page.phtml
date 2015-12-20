@@ -1,0 +1,71 @@
+<style type="text/css">
+    /* enable absolute positioning */
+    .search-input-widget {
+        margin:1em 0;
+    }
+    .search-input-widget .inner-addon {
+        position: relative;
+    }
+
+    /* style icon */
+    .search-input-widget .inner-addon .glyphicon {
+        position: absolute;
+        padding: 10px;
+        pointer-events: none;
+    }
+
+    /* align icon */
+    .search-input-widget .left-addon .glyphicon  { left:  0px;}
+    .search-input-widget .right-addon .glyphicon { right: 0px;}
+
+    /* add padding  */
+    .search-input-widget .left-addon input  { padding-left:  30px; }
+    .search-input-widget .right-addon input { padding-right: 30px; }
+
+
+
+</style>
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-page" class="btn btn-primary" id="create-new-page">New Page</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::pageStatusFilter(
+                        $this->status ? Repo_PageStatus::getInstance()->getLabel($this->status) : false,
+                        'page-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3>Pages</h3>
+    </div>
+    <div id="page_list">
+        <div class="panel-body">
+            <p>Manage pages, some guidelines or description</p>
+            <div class="form-group">
+                <div class="search-input-widget">
+                    <div class="col-md-4">
+                        <div class="inner-addon left-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                            <input class="search form-control" id="search-pages" placeholder="Search pages">
+                            <span class="right-of-input" id="clear-search-object" title="Clear search input" >
+                            <i class="glyphicon glyphicon-remove clear-input-icon" style="color: #999;"></i>
+                            <span class="clear-input-label">CLEAR SEARCH</span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav style="clear:left;">
+                <ul class="pagination"></ul>
+            </nav>
+        </div>
+        <?php echo Functions_View::listPages($this->pages); ?>
+    </div>
+
+</div>

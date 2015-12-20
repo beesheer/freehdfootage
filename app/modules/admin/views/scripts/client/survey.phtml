@@ -1,0 +1,31 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-survey" class="btn btn-primary" id="create-new-survey">New Survey</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::surveyStatusFilter(
+                        $this->status ? Repo_Survey::$statusLabels[$this->status] : false,
+                        'survey-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+            <!--
+            <div class="btn-group">
+                <?php //echo Functions_View::titleFilter( '/admin/client/survey/client/title/', isset($this->title)? $this->title->name : false, 'page-title-filter', isset($this->title)? $this->title->id : false );
+                ?>
+            </div>
+            -->
+        </div>
+        <h3>Surveys</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage surveys: add and edit</p>
+    </div>
+    <?php 
+		echo Functions_View::listSurveys($this->surveys); ?>
+</div>

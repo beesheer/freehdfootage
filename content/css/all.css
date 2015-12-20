@@ -1,0 +1,279 @@
+.fullWidth {
+    width: 100%;
+}
+
+.centerContainer {
+    margin: 10px 10px 0 10px;
+}
+
+.errors {
+    color: red;
+}
+
+.smallDesc {
+    font-size: 0.95em;
+}
+
+.smallDesc span {
+    color: #999;
+}
+
+.connectedSortable, .connectedSortableDocs {
+    min-height: 3em;
+    cursor: move;
+}
+
+.floatRight {
+	float:right;
+}
+
+.hide {
+	display:none;
+}
+
+.noClickThrough td {
+    cursor: default;
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.emailBubble
+{
+    float:left;
+    background-color:#eee;
+    padding-left:6px;
+    padding-right:6px;
+    border-radius:20px;
+    margin-right:10px;
+    color:#222;
+    border: solid 1px #ddd;
+    cursor:pointer;
+}
+
+.emailBubble:hover, .emailBubbleSelected
+{
+    background-color:#ddd;
+    color:#000;
+    border: solid 1px #ddd;
+    cursor:pointer;
+}
+
+.emailBubble:active
+{
+    background-color:#999;
+    color:#FFF;
+    border: solid 1px #999;
+}
+
+.emailBubbleArrow
+{
+    padding-left:5px;
+    color:#333;
+    font-size:9pt;
+    cursor:pointer;
+}
+
+.emailBubbleArrow:hover
+{
+    color:#666;
+}
+
+.emailBubbleIndicator
+{
+    padding-right:10px;
+    font-size:8pt;
+    line-height:0px;
+}
+
+.emailBubbleIndicatorActive
+{
+    color:#00cc00;
+}
+
+.emailBubbleIndicatorInactive
+{
+    color:#999;
+}
+
+.meeting-edit-button:hover
+{
+    text-decoration: underline;
+}
+
+.errorField
+{
+    border: solid 1px #ff0000;
+}
+
+.llicon-button
+{
+    color:#666;
+}
+
+.llicon-button:hover
+{
+    color:#000;
+}
+
+.llicon-link
+{
+    color:#666;
+}
+
+.llicon-link:hover
+{
+    color:#000;
+    text-decoration:underline;
+}
+
+.picker-arrow:before {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    width: 0;
+    margin-top:-20px;
+    margin-left:240px;
+    border: 10px solid transparent;
+    border-bottom-color: #fff;
+
+}
+
+.llcalendar-col{
+    magin:0px;
+    padding:0px;
+    width:14.28571428571429%;
+    float:left;
+    text-align:center;
+    /*background-color:#eee;*/
+}
+
+.llcalendar-day-title{
+    color:#999;
+}
+
+.llcalendar-date-empty{
+    height:40px;
+}
+
+.llcalendar-date{
+    height:40px;
+    padding-top:6px;
+    border-radius: 20px;
+    font-size:14pt;
+    cursor:pointer;
+}
+
+.llcalendar-date:hover{
+    background-color:#eee;
+}
+
+.llcalendar-date:active, .llcalendar-date-active{
+    background-color:#333;
+    color:#fff;
+}
+
+.llcalendar-date-active:hover{
+    background-color:#333;
+}
+
+
+
+.llapp-button{
+    color:#333;
+}
+
+.llapp-button:hover{
+    color:#666;
+}
+
+.llapp-button:active{
+    color:#000;
+}
+
+#llcontact-picker-item-container:hover{
+    background-color: #fcfcfc;
+}
+
+#llcontact-picker-item-container:active{
+    background-color: #ccc;
+}
+
+.llcontact-autocomplete-item{
+    height:30px;
+    background-color:#fff;
+    cursor: pointer;
+    padding-left:10px;
+    padding-top:5px;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+
+}
+
+.llcontact-autocomplete-item-unselected:hover{
+    background-color:#fcfcfc;
+}
+
+.llcontact-autocomplete-item-unselected:active{
+    background-color:#eee;
+}
+
+.llcontact-autocomplete-item-selected{
+    background-color:#eee;
+}
+
+.llcontact-autocomplete-item-selected:hover{
+    background-color:#eee;
+}
+
+.ll-landing-page {
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width:404px;
+    height:226px;
+}
+
+div {
+    word-wrap: break-word;
+}
+
+.forgot-link {
+    margin-top: 40px; text-align: center;
+}
+
+.submitButtonDiv {
+    word-wrap: normal;
+    text-align: center;
+}
+
+@media only screen and (max-width:612px) {
+
+    .meeting-play-button {
+        width: 200px !important;
+        padding-left: 55px !important;
+    }
+}
+
+.show-full-meeting-title {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+.tag-item {
+    margin-right: 0.5em;
+}
+
+.blockElement {
+    display: block;
+}
+
+.multiCheckbox label {
+    font-weight:normal;
+}
+.multiCheckbox label.formElementLabel {
+    font-weight: bold;
+}

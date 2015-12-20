@@ -1,0 +1,72 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="user-save-submit">Save</button>
+            <button type="button" class="btn btn-danger" id="user-delete">Delete</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3 id="userName" rel="<?php echo $this->user->id; ?>"><?php echo $this->user->surname . ', ' . $this->user->firstname; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage user: <?php echo $this->user->surname . ', ' . $this->user->firstname; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <h5>Details</h5>
+                <?php echo $this->form; ?>
+               <button type="button" class="btn btn-primary pull-right" id="user-email-signature">Add/Edit Email Signature</button>
+      
+             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Apps</h5>
+                    </div>
+                    <?php echo Functions_View::listTeamContents(Repo_App::getInstance()->getClientApps($this->client->id), $this->userApps, 'Repo_App', 'userApps'); ?>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Device Ids</h5>
+                    </div>
+                    <?php echo Functions_View::listDeviceIds($this->userDeviceIds); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row container" style="margin-top: 2em;">
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Packages</h5>
+                    </div>
+                    <?php echo Functions_View::listPackageContents(Repo_Package::getInstance()->getClientPackages($this->client->id), $this->userPackages, 'Repo_Package', 'userPackages'); ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Teams</h5>
+                    </div>
+                    <?php echo Functions_View::listPackageContents(Repo_Team::getInstance()->getClientTeams($this->client->id), $this->userTeams, 'Repo_Team', 'userTeams'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php  echo Functions_View::formModal(new Form_Admin_Client_UserEmailSignature_Create(false,array('userIdEmailSignature'=>$this->user->id,'userEmailSignature'=>$this->userEmailSignature)),'form-modal-email-signature');?>
+<?php 
+    echo Functions_View::deleteModal(
+        'Confirm Delete User',
+        'Please make sure you want to delete this user'
+    );
+?>

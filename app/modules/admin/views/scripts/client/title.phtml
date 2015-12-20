@@ -1,0 +1,24 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-title" class="btn btn-primary" id="create-new-title">New Title</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::titleStatusFilter(
+                        $this->status ? Repo_Title::$statusLabels[$this->status] : false,
+                        'title-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3>Titles</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage titles, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listTitles($this->titles); ?>
+</div>

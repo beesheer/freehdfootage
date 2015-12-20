@@ -1,0 +1,7 @@
+site-title;"Stratus English"
+promote-invite-email-body;"<p>Please join me to view a presentation together by clicking <a href='{promoteSessionLink}'>HERE</a></p><p>Download the calendar file here: <a href='{promoteSessionIcsLink}'>HERE</a></p>"
+promote-invite-email-subject;"{promoteSessionSubject} - Invitation to join a meeting presentation"
+promote-self-email-body;"You have started a presentation: by clicking <a href='{promoteSessionPresenterLink}'>HERE</a> to go back to your session."
+promote-self-email-subject;"{promoteSessionSubject} - You have started a meeting session"
+forgot-password-email-body;"<p>To reset your password please go <a href='{resetPasswordLink}'>here</a>.</p><p>If you are unable to navigate to the url above please copy and paste the line below in a browser:<br />{resetPasswordLink}</p>"
+forgot-password-email-subject;"Reset my password request"

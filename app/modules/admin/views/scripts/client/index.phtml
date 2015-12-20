@@ -1,0 +1,21 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-danger delete-client">Delete</button>
+            <button type="button" class="btn btn-primary pull-right" id="create-new-client">New Client</button>
+        </div>
+        <h3>Clients</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage clients, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listClients($this->clients); ?>
+</div>
+<?php echo Functions_View::formModal(new Form_Admin_Client_Create()); ?>
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete Client',
+        'Please make sure you want to delete selected clients:<br><b id="delete-client-name"></b>'
+    );
+?>

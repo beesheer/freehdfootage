@@ -1,0 +1,166 @@
+<form id="add-question-form" name="add-question-form" action="<?= $this->escape($this->element->getAction()) ?>" enctype="multipart/form-data" method="<?= $this->escape($this->element->getMethod()) ?>">
+    <!-- question text -->
+    <fieldset>
+        <?php
+        $uri = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+        if (strpos($uri, "new-question") !== FALSE) {
+            echo $this->element->client;
+            echo $this->element->options;
+            echo '<input type="hidden" id="responsescope"  name="responsescope"  value="">';
+            echo '<input type="hidden" id="response_all"   name="response_all"   value="">';
+            echo '<input type="hidden" id="response_right" name="response_right" value="">';
+            echo '<input type="hidden" id="response_wrong" name="response_wrong" value="">';
+            echo '<input type="hidden" id="response_array" name="response_array" value="">';
+        } else {
+            echo '<input type="hidden" id="id" name="id" value="">';
+            echo '<input type="hidden" id="order" name="order" value="">';
+            echo '<input type="hidden" id="client" name="client" value="">';
+            echo '<input type="hidden" id="page" name="page" value="">';
+        }
+        ?>
+        <script language="javascript">
+            //var feedbackQuestionTypeLabels = '<?php //echo $this->feedbackQuestionTypeLabels;  ?>';
+            //alert("feedbackQuestionTypeLabels: " + feedbackQuestionTypeLabels)
+            try {
+                var opt = document.getElementById("options").value;
+                if (opt != "") {
+                    var options_decode = JSON.parse(opt);
+                    document.write("Options: " + options_decode[0].text);
+                }
+            }
+            catch (e) {/*no options yet*/
+            }
+        </script>
+        <?= $this->element->surveyid ?>
+        <?= $this->element->questiontype ?>
+        <?= $this->element->feedback_questiontype_filter ?>
+        <?= $this->element->question_english ?>
+        <?= $this->element->question_id ?>
+<?= $this->element->question_french ?>
+        <input type="hidden" id="correct_answer" name="correct_answer" value="">
+    </fieldset>
+
+    <!-- media -->
+    <fieldset id="fieldset-question-media">
+        <legend>Media</legend>
+        <table class="fullWidth">
+            <tr>
+                <td><?= $this->element->image ?><p></p></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><?= $this->element->video ?><p></p></td>
+                <td></td>
+            </tr>
+        </table>
+
+
+    </fieldset>
+
+    <!-- option text -->
+    <fieldset id="fieldset-question-options">
+        <legend>Options</legend>
+        <p id="option-instructions">Add option text. Use checkboxes to indicate correct answer(s).</p>
+        <div class="formElementBlock form-group" style=""><label for="option_prefix" class="formElementLabel required">Option prefix</label>
+            <select name="option_prefix" id="option_prefix" class="form-control">
+                <option value="0">none</option>
+                <option value="1">A</option>
+                <option value="2">A.</option>
+                <option value="3">a</option>
+                <option value="4">a.</option>
+                <option value="5">#</option>
+                <option value="6">#.</option>
+            </select></div>
+        <ul class="list-group client-pages-list-list connectedSortable" id="question-options">
+        </ul>
+        <button type="button" class="btn btn-default" id="btn-add-option">ADD OPTION</button>
+        <div class="form-control modal-content response-text-panel" id="option-options">
+            <button type="button" class="response close" >×</button>
+            <h4>Additional details for this option</h4>
+            <div class="inner">
+                <input type="hidden" id="option_saved_input_id" value="">
+                <label for="option_image_input">Image:
+                    <div id="optionimages"></div><p></p></label>
+                <label for="option_video_input">Video:
+                    <div id="optionvideos"></div><p></p></label>
+                <label for="option_next_input">Next Question Id:
+                    <input type="text" class="form-control" id="option_next_input" value=""></label>
+                <button type="button" class="btn btn-primary" onclick="saveOptionOptions()" id="btn-save-optionoptions">SAVE</button>
+            </div>
+        </div>
+    </fieldset>
+
+    <br/>
+
+    <!-- response text -->
+    <fieldset id="fieldset-question-responses">
+        <legend>Responses</legend>
+
+        <div class="formElementBlock form-group">
+            <label for="response-scope-filter" class="formElementLabel required">Response scope</label>
+            <select name="response-scope-filter" id="response-scope-filter" class="form-control">
+                <option value="1">No response</option>
+                <option value="2">One standard response</option>
+                <option value="3">Right and wrong responses</option>
+                <option value="4">One response per option</option>
+                <option value="5">Custom</option>
+            </select>
+        </div>
+        <div class="btn-group pull-left hide" id="btn-input-single-response">
+            <button type="button" class="btn btn-default open-responseinput" id="btn-responseinput-all">Create/edit all-case response</button>
+        </div>
+        <div class="btn-group pull-left hide" id="btn-input-rightwrong-response">
+            <button type="button" class="btn btn-default open-responseinput" id="btn-responseinput-right">Create/edit right response</button>
+            <button type="button" class="btn btn-default open-responseinput" id="btn-responseinput-wrong">Create/edit wrong response</button>
+        </div>
+        <div class="btn-group pull-left hide" id="btn-input-peroption-response">
+            <button type="button" class="btn btn-default open-responseinput" id="btn-responseinput-each">Create/edit each-case responses</button>
+        </div>
+
+        <div class="form-control modal-content response-text-panel" id="response-input-all">
+            <button type="button" class="response close" >×</button>
+            <h4>All-cases response</h4>
+            <div class="inner">
+                <textarea rows="20"></textarea>
+            </div>
+        </div>
+        <div class="form-control modal-content response-text-panel" id="response-input-right">
+            <button type="button" class="response close" >×</button>
+            <h4>Right case response</h4>
+            <div class="inner">
+                <textarea rows="20"></textarea>
+            </div>
+        </div>
+        <div class="form-control modal-content response-text-panel" id="response-input-wrong">
+            <button type="button" class="response close" >×</button>
+            <h4>Wrong case response</h4>
+            <div class="inner">
+                <textarea rows="20"></textarea>
+            </div>
+        </div>
+        <div class="form-control modal-content response-text-panel" id="response-input-each">
+            <button type="button" class="response close" >×</button>
+            <h4>Each case response</h4>
+            <div class="inner" id="response-input-each-content">
+            </div>
+        </div>
+    </fieldset>
+    <br />
+<?= $this->element->submit ?>
+</form>
+<form method="post" action="test">
+    <button type="button" class="btn btn-primary" id="add-tag-to-question" question_id="">Add Tag</button>
+    <button type="button" class="btn btn-danger" id="delete-tag-from-question" question_id="">Delete Checked Tags</button>
+    <br />
+    <table border="1" class="table table-striped table-bordered">
+        <thead>
+        <th>Tag Name</th><th>Select</th>
+        </thead>
+    <?php
+            $allTags = Repo_QuestionTag::getInstance()->getTags();
+            foreach($allTags as $tag){
+            echo "<tr><td>".$tag['tag_name']." > "."</td><td><input type='checkbox' class='to_delete' tag_id='".$tag['id']."'></tr>";
+            }
+        ?>
+    </table>
+</form>

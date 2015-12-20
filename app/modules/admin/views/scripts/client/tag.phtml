@@ -1,0 +1,91 @@
+<style>
+    #tag-sidebar{
+        top:10px;
+        left:800px;
+        box-sizing:border-box;
+    }
+</style>
+<link rel="stylesheet" href="/js/libraries/jstree/dist/themes/default/style.min.css" />
+
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button class="btn btn-danger" id="delete-tag">Delete</button>
+            <button class="btn btn-primary" id="update-tag">Edit</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" id="addtag">Add New</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3>Parent Tags</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <th>Tag</th><th>Select</th>
+            </thead>
+            <?php
+            foreach ($this->tags as $tag) {
+                echo("<tr><td>" . $tag['name'] . "</td><td><div class='checkbox' tag-id='" . $tag['id'] . "' client-id='" . $tag['client_id'] . "' parent-id='" . $tag['parent_id'] . "'></div></td></tr>");
+            }
+            ?>
+        </table>
+    </div>
+</div>
+<br />
+<div id="tag-sidebar" class="panel panel-default app-content">
+    <!--
+    <div class="btn-group pull-right">
+        <button class="btn btn-warning" id="move-tag-up">Move Up</button>
+        <button class="btn btn-primary" id="move-tag-down">Move Down</button>
+    </div>
+    -->
+    <div class="panel-body">
+        <h3>Preview</h3>
+
+        <div id="jstree_demo_div">
+
+            <?php
+
+            function traceTagTree($tagTree) {
+                echo "<ul>";
+                for($h=0; $h < count($tagTree); $h++) {
+                    $tag = $tagTree[$h];
+                    echo "<li>" . $tag['name'];
+                    //does it have children?
+                    if(sizeof($tag['children']) > 0 ) {
+                        traceTagTree($tag['children']);
+                    }
+                    echo "</li>";
+                }
+                echo "</ul>";
+            }
+
+            traceTagTree($this->tagTree);
+
+            ?>
+
+        </div>
+
+    </div>
+
+    <script src="/js/libraries/jstree/dist/jstree.min.js"></script>
+    <script>
+        $(function() {
+            $('#jstree_demo_div').jstree();
+            $("#jstree_demo_div").jstree('open_all');
+        });
+
+
+    </script>
+</div>
+<?php echo Functions_View::createNewTag(); ?>
+<?php echo Functions_View::updateExistingTag(); ?>
+<?php echo
+Functions_View::deleteModal(
+    'Confirm Delete Tag',
+    'Please make sure you want to delete the selected tags:<br><b id="delete-tag-names"></b>'
+);
+?>
+
+
+

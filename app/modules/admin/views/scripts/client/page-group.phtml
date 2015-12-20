@@ -1,0 +1,47 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a class="btn btn-success" href="/admin/client/page-detail/id/<?php echo $this->page->getId(); ?>">Back to page detail</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="page-group-save-submit">Save</button>
+        </div>
+        <h3 id="pageName" rel="<?php echo $this->page->id; ?>"><?php echo $this->page->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage linked pages for page: <?php echo $this->page->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-12">
+            <div class="row">
+                <div id="pages-out" class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Client Pages</h5>
+                        </div>
+                        <ul class="list-group client-pages-list connectedSortable" id="client-pages">
+                            <?php echo Functions_View::listPageGroup($this->clientPages, 'li', 'page-list-item list-group-item'); ?>
+                        </ul>
+                    </div>
+                </div>
+                <div id="pages-in" class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Linked Pages</h5>
+                        </div>
+                        <ul class="list-group page-group-pages-list connectedSortable" id="page-group-pages">
+                            <?php echo Functions_View::listPageGroup($this->pageGroupPages->toArray(), 'li', 'page-list-item list-group-item'); ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    #page-group-pages {min-height: 600px;}
+    .hostPage {color: red; font-weight: bold;}
+</style>

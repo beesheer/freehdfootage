@@ -1,0 +1,70 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" id="package-save-submit">Save</button>
+            <button type="button" class="btn btn-danger" id="package-delete">Delete</button>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <?php echo Functions_View::packageStatusFilter(
+                        $this->status ? Repo_Package::$statusLabels[$this->status] : false,
+                        'package-status-filter',
+                        $this->status
+                    );
+                ?>
+            </div>
+        </div>
+        <h3 id="packageName" rel="<?php echo $this->package->id; ?>"><?php echo $this->package->name; ?></h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage package: <?php echo $this->package->name; ?></p>
+    </div>
+    <div class="row container">
+        <div class="col-md-6">
+            <h3>Details</h3>
+            <?php echo $this->form; ?>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Titles</h5>
+                        </div>
+                        <?php echo Functions_View::listPackageContents(Repo_Title::getInstance()->getClientTitles($this->client->id), $this->packageTitles, 'Repo_Title', 'packageTitles'); ?>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Apps</h5>
+                        </div>
+                        <?php echo Functions_View::listTeamContents(Repo_App::getInstance()->getClientApps($this->client->id), $this->packageApps, 'Repo_App', 'packageApps'); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-primary" id="new-manifest">Generate Manifest</button>
+                            </div>
+                            <h5>Production Manifests</h5>
+                        </div>
+                        <?php echo Functions_View::listPackageManifests(Repo_PackageManifest::getInstance()->getPackageManifest($this->package->id)); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php echo
+    Functions_View::deleteModal(
+        'Confirm Delete Package',
+        'Please make sure you want to delete this package'
+    );
+?>

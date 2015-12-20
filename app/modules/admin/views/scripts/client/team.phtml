@@ -1,0 +1,14 @@
+<div class="panel panel-default app-content">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <a href="/admin/client/new-team" class="btn btn-primary" id="create-new-team">New Team</a>
+        </div>
+        <div class="pull-right">&nbsp;</div>
+        <h3>Teams</h3>
+    </div>
+    <div class="panel-body">
+        <p>Manage teams, some guidelines or description</p>
+    </div>
+    <?php echo Functions_View::listTeams($this->teams); ?>
+</div>
