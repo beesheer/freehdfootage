@@ -29,7 +29,6 @@ class IndexController extends Controller_Action
      */
     public function topQueriesAction()
     {
-        DebugBreak('1@127.0.0.1:7869;s=0,d=1,p=0,c=1');
         $queries = Repo_Query::getInstance()->getTopQueries();
         $this->view->rows = $queries;
     }

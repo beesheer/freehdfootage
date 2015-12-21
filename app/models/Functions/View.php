@@ -24,7 +24,7 @@ class Functions_View {
             <div class="thumbnail">
               <iframe width="100%" height="60%" src="https://www.youtube.com/embed/' . $_v->youtube_id . '" frameborder="0" allowfullscreen></iframe>
               <div class="caption">
-                <h3>' . $_v->name . '</h3>
+                <h3><a href="http://www.youtube.com/watch?v=' . $_v->youtube_id . '" target="_blank">' . $_v->name . '</a></h3>
                 <p>' . $_v->description . '</p>
               </div>
             </div>
@@ -44,7 +44,7 @@ class Functions_View {
         $html = '';
         foreach ($rows as $_r) {
             $html .= '<div class="col-sm-1 col-md-1">
-            <h4><a href="/?q=' . $_r->q . '">' . $_r->q . '</h4>
+            <h4><a href="/?q=' . $_r->q . '">' . $_r->q . '</a></h4>
           </div>';
         }
         return $html;
