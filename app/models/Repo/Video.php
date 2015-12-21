@@ -46,9 +46,9 @@ class Repo_Video extends Repo_Abstract
      * @param integer $parentTagId
      * @return integer
      */
-    public function addNew($name, $description, $youtubeId, $filePath)
+    public function addNew($name, $description, $youtubeId, $filePath = '')
     {
-
+        $dbTable = $this->getUpdateTable();
         $rowData = array(
             'name' => $name,
             'description' => $description,

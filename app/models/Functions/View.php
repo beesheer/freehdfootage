@@ -32,4 +32,21 @@ class Functions_View {
         }
         return $html;
     }
+
+    /**
+     * List Videos
+     *
+     * @param Zend_Db_Table_Rowset_Abstract $videos
+     * @return string
+     */
+    public static function listQueries($rows)
+    {
+        $html = '';
+        foreach ($rows as $_r) {
+            $html .= '<div class="col-sm-1 col-md-1">
+            <h4><a href="/?q=' . $_r->q . '">' . $_r->q . '</h4>
+          </div>';
+        }
+        return $html;
+    }
 }

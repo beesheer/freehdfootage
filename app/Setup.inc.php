@@ -44,11 +44,6 @@ if ($env == 'development') {
 
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', $env);
 
-if ($env == 'development') {
-    error_reporting(E_ALL ^ E_STRICT); //This should be determined by $config->appStage == 'dev'
-    ini_set('display_errors',true); //This should be determined by $config too
-}
-
 // Set default date timezone
 if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set('America/Toronto');
@@ -58,6 +53,11 @@ if (function_exists('date_default_timezone_set')) {
 ini_set('magic_quotes_gpc', 0);
 ini_set('error_log', DATA_PATH . 'log' . DS. 'php_error.log');
 ini_set('log_errors', '1');
+
+if ($env == 'development') {
+    error_reporting(E_ALL ^ E_STRICT); //This should be determined by $config->appStage == 'dev'
+    ini_set('display_errors',true); //This should be determined by $config too
+}
 
 // Autoload
 require_once 'Zend/Loader.php';

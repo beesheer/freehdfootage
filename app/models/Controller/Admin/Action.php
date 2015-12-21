@@ -7,6 +7,5 @@ class Controller_Admin_Action extends Controller_Action
     public function init()
     {
         parent::init();
-        $this->_helper->layout->setLayout('client-admin-default');
     }
 }

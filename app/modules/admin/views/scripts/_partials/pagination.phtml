@@ -1,0 +1,24 @@
+<?php if ($this->paginator->pageCount): ?>
+<!-- Previous page link -->
+<?php if (isset($this->paginator->previous)): ?>
+  <a class="nextprev" href="<?php echo $this->baseUrl . $this->paginator->previous; ?>">&laquo; </a>
+<?php else: ?>
+  <span class="nextprev">&laquo;</span>
+<?php endif; ?>
+
+<!-- Numbered page links -->
+<?php foreach ($this->paginator->pagesInRange as $page): ?>
+  <?php if ($page != $this->paginator->current): ?>
+    <a href="<?php echo $this->baseUrl . $page; ?>"><?php echo $page; ?></a>
+  <?php else: ?>
+    <span class="current"><?php echo $page; ?></span>
+  <?php endif; ?>
+<?php endforeach; ?>
+
+<!-- Next page link -->
+<?php if (isset($this->paginator->next)): ?>
+  <a class="nextprev" href="<?php echo $this->baseUrl . $this->paginator->next; ?>">&raquo;</a>
+<?php else: ?>
+  <span class="nextprev">&raquo;</span>
+<?php endif; ?>
+<?php endif; ?>
